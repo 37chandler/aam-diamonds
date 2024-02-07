@@ -1,0 +1,98 @@
+---
+title: "Diamond Regression"
+author: "Your Name Here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+html_document:
+    toc: true
+    toc_depth: 6
+    number_sections: true
+    toc_float: true
+    code_folding: hide
+    theme: flatly
+    code_download: true
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+
+library(tidyverse)
+library(scales)
+
+d <- read_tsv("diamond-data.txt")
+```
+
+## Introduction
+
+Imagine it's 2002, and you're part of the Amazon team that's just getting into the diamond market. It's an exciting time! Your manager just dropped some data on your desk: Amazon is sourcing diamonds from various suppliers. Your manager said that she
+calculated the average and found that Supplier B seemed really expensive. She asked,
+"should we just drop them and only use A and C?" Here are the numbers she
+reported to you: 
+```{r echo=F}
+for_table <- d %>% 
+  group_by(supplier) %>% 
+  summarize(mean_price = dollar(mean(price)))
+  # check out the scales library for the useful functions
+  # dollar, comma, and percent. 
+
+knitr::kable(for_table)
+```
+
+Being an intrepid data analyst, you know better than to just look at one 
+summary statistic, so you decide to plot the data. 
+
+```{r echo=F}
+ggplot(d,
+       aes(x=supplier,y=price)) + 
+  geom_boxplot() + 
+  theme_minimal() + 
+  labs(x="",y="Diamond Price",
+       title="Distribution of Diamond Prices by Supplier") + 
+  scale_y_continuous(label=dollar) # another cool scales application
+```
+
+Sure enough, your manager seems to be on to something. Your job? Dig into this data and find out if Amazon is getting different prices for diamonds of the same quality from different suppliers. Are these price differences significant, or just random noise? It's time to put your analytical skills to the test.
+
+You don't need to do a big write-up of your analysis. You can briefly explain 
+what you do, but the main thing is getting to an answer for your manager. We're
+going to revisit this assignment in a couple of weeks with the goal of presenting
+your results in a compelling fashion.
+
+There's a description of the data set at the end of this document. 
+
+## Analysis
+
+<!-- Put your work in this section. --> 
+
+
+
+
+
+## Appendix: Description of the Diamonds Dataset
+
+Our diamonds dataset is a comprehensive collection diamond data from our suppliers, 
+representing various attributes of a large number of diamonds. 
+The dataset includes the following attributes:
+
+- `Carat`: Numeric. Represents the weight of the diamond, measured in carats. A higher carat number indicates a heavier diamond.
+
+- `Cut`: Categorical. Indicates the quality of the cut of the diamond, which affects its symmetry, brightness, and overall appearance. The categories include Fair, Good, Very Good, Premium, and Ideal, with Ideal being the highest quality.
+
+- `Color`: Categorical. Denotes the color grade of the diamond, which ranges from J (lowest grade, more color) to D (highest grade, colorless). The grading scale moves from a noticeable color to colorless.
+
+- `Clarity`: Categorical. Describes the clarity of the diamond, which refers to the absence of inclusions and blemishes. The categories range from I1 (Inclusions 1, lowest clarity) to IF (Internally Flawless, highest clarity).
+
+- `Depth`: Numeric. The depth percentage of the diamond, calculated as the ratio of the diamond's total depth (from table to culet) to its average diameter.
+
+- `Table`: Numeric. Refers to the width of the top facet of the diamond, known as the table, relative to the widest point of the diamond. It is expressed as a percentage.
+
+- `Price`: Numeric. The price of the diamond in US dollars.
+
+- `X`: Numeric. The length of the diamond in millimeters.
+
+- `Y`: Numeric. The width of the diamond in millimeters.
+
+- `Z`: Numeric. The depth of the diamond in millimeters.
+
+- `Supplier`: Categorical. Represents the supplier of the diamonds to a major online marketplace (e.g., Amazon). Each diamond is sourced from one of several suppliers, each with varying reputations and qualities of service. The suppliers are anonymized and labeled as "Supplier A", "Supplier B", "Supplier C", etc.
+
